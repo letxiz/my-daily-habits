@@ -1,16 +1,36 @@
 import './App.css'
 import Footer from "./components/Footer";
-function App(){
+import BemVindo from './components/Bemvindo';
+import Cabecalho from './components/Cabecalho';
+/*function App() {
   return (
     <div>
-      <h1>
-        My Daily Habits
-      </h1>
-      <p>Gerencie seus hábitos diários de forma simples e visual</p>
+      <Cabecalho
+        titulo="My Daily Habits"
+        descricao="Construindo uma rotina melhor, um hábito por vez."
+      />
+      <BemVindo nomeUsuario="turma iteam" totalHabitos={5} />
+      <Footer />
+    </div>
+  );
+}*/
 
-      <Footer/>
+function App() {
+  return (
+    <div>
+      <Cabecalho
+        titulo="My Daily Habits"
+        descricao="Construindo uma rotina melhor, um hábito por vez."
+      />
+      <BemVindo nomeUsuario="turma iteam" totalHabitos={5} />
+      <Footer />
     </div>
   );
 }
 
+
+
 export default App
+
+
+
