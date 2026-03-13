@@ -5,6 +5,7 @@ import BemVindo from './components/Bemvindo';
 import SecaoHabitos from './components/SecaoHabitos';
 import HabitList from './components/HabitList';
 
+
 function App() {
  const habits = [
    { id: 1, titulo: 'Exercício',   meta: 5, ativo: true,  diasFeitos: 5 },
@@ -13,10 +14,11 @@ function App() {
    { id: 4, titulo: 'Hidratação ',  meta: 7, ativo: true,  diasFeitos: 6 },
    
  ]
-
+ 
 
  return (
    <div>
+   
      <Header />
      <main>
       <BemVindo nomeUsuario="turma iteam" totalHabitos={habits.length} />

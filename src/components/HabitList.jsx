@@ -1,100 +1,99 @@
 import { useState } from 'react'
 import HabitCard from './HabitCard'
 
-
 function HabitList() {
   const [habits, setHabits] = useState([
-    { id: 1, titulo: 'Beber 2L de água', descricao: 'Ao longo do dia', categoria: 'Saúde' },
-    { id: 2, titulo: 'Ler 20 minutos', descricao: 'Livro ou artigo', categoria: 'Estudo' },
-    { id: 3, titulo: 'Caminhar 30 minutos', descricao: 'Depois do trabalho', categoria: 'Exercício' },
+    { id: 1, nome: 'Exercício',  descricao: 'Treino de força',    meta: 5, ativo: true,  diasFeitos: 5 },
+    { id: 2, nome: 'Leitura',    descricao: 'Livro ou artigo',    meta: 7, ativo: true,  diasFeitos: 3 },
+    { id: 3, nome: 'Meditação',  descricao: 'Respiração e foco',  meta: 7, ativo: false, diasFeitos: 0 },
+    { id: 4, nome: 'Hidratação', descricao: 'Beber 2L de água',   meta: 7, ativo: true,  diasFeitos: 6 },
   ])
-
   const removerHabit = (id) => {
-    setHabits(habits.filter(habit => habit.id !== id))
+  setHabits(habits.filter(habit => habit.id !== id))
   }
-  const [novoTitulo, setNovoTitulo] = useState('')
+  const [novoNome,      setNovoNome]      = useState('')
   const [novaDescricao, setNovaDescricao] = useState('')
   const [novaCategoria, setNovaCategoria] = useState('')
 
   const adicionarHabit = (event) => {
-    event.preventDefault()
+  event.preventDefault()
 
-    if (!novoTitulo.trim()) {
-      // Validação básica: título é obrigatório
-      alert('Informe um título para o hábito.')
-      return
-    }
-    const novoHabit = {
-      id: Date.now(), // id simples baseado em timestamp
-      titulo: novoTitulo,
-      descricao: novaDescricao,
-      categoria: novaCategoria || 'Geral',
-    } 
+  if (!novoNome.trim()) {
+    alert('Informe um nome para o hábito.')
+    return
+  }
 
-    setHabits([...habits, novoHabit])
+  const novoHabit = {
+    id: Date.now(),
+    nome: novoNome,
+    descricao: novaDescricao,
+    meta: 7,              // padrão
+    ativo: true,          // padrão
+    diasFeitos: 0,        // padrão
+    categoria: novaCategoria || 'Geral',
+  }
 
-      // limpar campos
-    setNovoTitulo('')
-    setNovaDescricao('')
-    setNovaCategoria('')
+  setHabits([...habits, novoHabit])
+
+  // Limpar os campos após adicionar
+  setNovoNome('')
+  setNovaDescricao('')
+  setNovaCategoria('')
 }
-  
 
   return (
     <section>
-      <h2>Hábitos cadastrados</h2>
-
-      <form onSubmit={adicionarHabit} className="habit-form">
-        <div>
-          <label>
-            Título do Hábitos
-            <input
-              type='text'
-              value={novoTitulo}
-              onChange={(e)=> setNovoTitulo(e.target.value)}
-              />
-          </label>
-        </div>
-
-        <div>
-          <label>
-            Descrição
-            <input 
-            type='text'
+    <form onSubmit={adicionarHabit} className="habit-form">
+      <div>
+        <label>
+          Nome do hábito 
+          <input
+            type="text"
+            value={novoNome}
+            onChange={(e) => setNovoNome(e.target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Descrição
+          <input
+            type="text"
             value={novaDescricao}
             onChange={(e) => setNovaDescricao(e.target.value)}
-            />
-          </label>
-        </div>
-
-        <div>
-          <label>
-            Categoria
-            <input 
-            type='text'
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Categoria
+          <input
+            type="text"
             value={novaCategoria}
             onChange={(e) => setNovaCategoria(e.target.value)}
-            />
-          </label>
-        </div>
+          />
+        </label>
+      </div>
+      <button type="submit">Adicionar hábito</button>
+    </form>
 
-        <button type='submit'> Adicionar hábito</button>
-      </form>
-
-      {habits.length === 0
-        ? <p>Nenhum hábito cadastrado ainda.</p>
-        : <p>Você tem {habits.length} hábito(s) cadastrado(s).</p>}
-      
-      {habits.map(habit => (
+    <ul>
+      {habits.length === 0 &&
+       <p>Nenhum hábito cadastrado ainda. Que tal começar?</p>}
+      {habits.map((habit) => (
         <HabitCard
           key={habit.id}
-          titulo={habit.titulo}
+          nome={habit.nome}
           descricao={habit.descricao}
-          categoria={habit.categoria}
-          onRemover={() => removerHabit(habit.id)}
-          />
+          meta={habit.meta}
+          ativo={habit.ativo}
+          diasFeitos={habit.diasFeitos}
+           onRemover={() => removerHabit(habit.id)}
+
+        />
       ))}
-    </section>
+    </ul>
+     </section>
   )
 }
 
