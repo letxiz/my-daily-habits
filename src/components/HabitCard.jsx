@@ -1,4 +1,4 @@
-function HabitCard({ titulo, meta, ativo = true, diasFeitos = 0, categoria = 'Geral' }) {
+function HabitCard({ titulo, meta, ativo = true, diasFeitos = 0, categoria = ' ' }) {
  const metaAtingida = diasFeitos >= meta
 
 
@@ -11,11 +11,11 @@ function HabitCard({ titulo, meta, ativo = true, diasFeitos = 0, categoria = 'Ge
    <div className="habit-card">
      <h3>{titulo}</h3>
      <p>{mensagemMeta}</p>
-     <small>Categoria: {categoria}</small>
+     <small>Categoria: { categoria } </small>
 
 
      {/* Ternário: dois resultados possíveis */}
-     <span>{ativo ? 'Ativo' : 'Pausado'}</span>
+     <span>{ativo ? '✅ ' : '⏸️ '}</span>
 
 
      {/* &&: um resultado ou nada */}
