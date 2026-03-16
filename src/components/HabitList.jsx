@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,  useEffect } from 'react'
 import HabitCard from './HabitCard'
 
 function HabitList() {
@@ -7,7 +7,14 @@ function HabitList() {
     { id: 2, nome: 'Leitura',    descricao: 'Livro ou artigo',    meta: 7, ativo: true,  diasFeitos: 3 },
     { id: 3, nome: 'Meditação',  descricao: 'Respiração e foco',  meta: 7, ativo: false, diasFeitos: 0 },
     { id: 4, nome: 'Hidratação', descricao: 'Beber 2L de água',   meta: 7, ativo: true,  diasFeitos: 6 },
+    
   ])
+   useEffect(() => {
+    console.log('✅ HabitList montou')
+  }, [])
+
+
+  
   const removerHabit = (id) => {
   setHabits(habits.filter(habit => habit.id !== id))
   }
