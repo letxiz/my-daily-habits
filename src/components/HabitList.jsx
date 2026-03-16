@@ -13,6 +13,9 @@ function HabitList() {
     console.log('✅ HabitList montou')
   }, [])
 
+useEffect(() => {
+  console.log('🔄 habits mudou. Total:', habits.length)
+}, [habits])
 
   
   const removerHabit = (id) => {
