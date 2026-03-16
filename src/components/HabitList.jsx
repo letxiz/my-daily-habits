@@ -14,8 +14,10 @@ function HabitList() {
   }, [])
 
 useEffect(() => {
-  console.log('🔄 habits mudou. Total:', habits.length)
+  localStorage.setItem('my-daily-habits', JSON.stringify(habits))
+  console.log('💾 Hábitos salvos:', habits.length)
 }, [habits])
+
 
   
   const removerHabit = (id) => {
