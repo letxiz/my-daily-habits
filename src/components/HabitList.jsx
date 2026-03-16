@@ -24,7 +24,7 @@ function HabitList() {
 })
 
 
-   useEffect(() => {
+useEffect(() => {
     console.log('✅ HabitList montou')
   }, [])
 
@@ -67,6 +67,7 @@ useEffect(() => {
   setNovaDescricao('')
   setNovaCategoria('')
 }
+
 
   return (
     <section>
