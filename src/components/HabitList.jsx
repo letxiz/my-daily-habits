@@ -88,7 +88,7 @@ function HabitList() {
           meta={habit.meta}
           ativo={habit.ativo}
           diasFeitos={habit.diasFeitos}
-           onRemover={() => removerHabit(habit.id)}
+          onRemover={() => removerHabit(habit.id)}
 
         />
       ))}
