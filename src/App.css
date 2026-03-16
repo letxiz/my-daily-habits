@@ -23,7 +23,8 @@
 body {
  font-family: system-ui, -apple-system, sans-serif;
  margin: 0;
- background-image: linear-gradient(rgb(199, 13, 202), rgb(188, 139, 193));
+ background: #8ba697;
+ background: linear-gradient(90deg,rgb(190, 135, 195) 9%, rgb(201, 132, 202) 11%, rgb(184, 101, 188) 54%, rgb(218, 61, 200) 88%);
 }
 
 header {
