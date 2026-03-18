@@ -1,139 +1,142 @@
-import { useState, useEffect, useRef } from "react"
-import HabitCard from "./HabitCard"
+import { useState, useRef } from 'react'
+import HabitCard from './HabitCard'
+import { useHabits } from '../contexts/HabitsContext'
 
-function HabitList({ habits, setHabits }) {
+function HabitList() {
 
-  const [novoNome, setNovoNome] = useState("")
-  const [novaDescricao, setNovaDescricao] = useState("")
-  const [novaCategoria, setNovaCategoria] = useState("")
+  const { habits, adicionarHabit, removerHabit, toggleAtivo } = useHabits()
+
+  const [form, setForm] = useState({
+    novoNome: '',
+    novaDescricao: '',
+    novaCategoria: '',
+    novaMeta: '7',
+  })
 
   const [erroNome, setErroNome] = useState('')
+  const nomeInputRef = useRef(null)
 
   const handleChange = (e) => {
-  const { name, value } = e.target
-  // [name] é uma chave dinâmica — usa o valor de name como nome da propriedade
-  if (name === 'novoNome') {
-    setNovoNome(value)
-    // Valida comprimento mínimo em tempo real
-    if (value.length > 0 && value.length < 3) {
-      setErroNome('O nome deve ter pelo menos 3 caracteres.')
-    } else {
-      setErroNome('')
+    const { name, value } = e.target
+
+    setForm(prev => ({ ...prev, [name]: value }))
+
+    if (name === 'novoNome') {
+      if (value.length > 0 && value.length < 3) {
+        setErroNome('O nome deve ter pelo menos 3 caracteres.')
+      } else {
+        setErroNome('')
+      }
     }
   }
-  if (name === 'novaDescricao') setNovaDescricao(value)
-  if (name === 'novaCategoria') setNovaCategoria(value)
-}
 
-const nomeInputRef = useRef(null)
-
-
-  // salvar no localStorage sempre que habits mudar
-  useEffect(() => {
-    localStorage.setItem("my-daily-habits", JSON.stringify(habits))
-  }, [habits])
-
-  const adicionarHabit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault()
 
-    if (!novoNome.trim()) {
-      alert("Informe um nome para o hábito.")
+    if (!form.novoNome.trim() || erroNome) {
+      nomeInputRef.current?.focus()
       return
     }
-    if (erroNome) {
-    nomeInputRef.current?.focus()
-    return
-  }
-
 
     const novoHabit = {
       id: Date.now(),
-      titulo: novoNome,
-      descricao: novaDescricao,
-      categoria: novaCategoria || "Geral",
-      meta: 7,
+      nome: form.novoNome,
+      descricao: form.novaDescricao,
+      categoria: form.novaCategoria || 'Geral',
+      meta: parseInt(form.novaMeta) || 7,
       ativo: true,
-      diasFeitos: 0
+      diasFeitos: 0,
     }
 
-    setHabits(prev => [...prev, novoHabit])
-    setNovoNome('')
-    setNovaDescricao('')
-    setNovaCategoria('')
+    adicionarHabit(novoHabit)
+
+    setForm({
+      novoNome: '',
+      novaDescricao: '',
+      novaCategoria: '',
+      novaMeta: '7',
+    })
+
+    setErroNome('')
     nomeInputRef.current?.focus()
   }
-  
-  
-  const removerHabit = (id) => {
-    setHabits(habits.filter((habit) => habit.id !== id))
-  }
+
+  if (!habits) return null
 
   return (
     <section>
 
-      <form onSubmit={adicionarHabit} className="habit-form">
+      <form onSubmit={handleSubmit} className="habit-form">
 
         <div>
-          <label>
-            Nome do hábito
+          <label>Nome do hábito *
             <input
               type="text"
               name="novoNome"
-              value={novoNome}
+              value={form.novoNome}
               onChange={handleChange}
               ref={nomeInputRef}
             />
           </label>
-           {erroNome && <p style={{ color: 'red', fontSize: '0.8rem' }}>{erroNome}</p>}
+          {erroNome && <p style={{ color: 'red', fontSize: '0.8rem' }}>{erroNome}</p>}
         </div>
 
         <div>
-          <label>
-            Descrição
+          <label>Descrição
             <input
               type="text"
-              name="novaDescricao" 
-              value={novaDescricao}
+              name="novaDescricao"
+              value={form.novaDescricao}
               onChange={handleChange}
             />
           </label>
         </div>
 
         <div>
-          <label>
-            Categoria
+          <label>Categoria
             <input
               type="text"
               name="novaCategoria"
-              value={novaCategoria}
+              value={form.novaCategoria}
+              onChange={handleChange}
+            />
+          </label>
+        </div>
+
+        <div>
+          <label>Meta
+            <input
+              type="number"
+              name="novaMeta"
+              min="1"
+              max="7"
+              value={form.novaMeta}
               onChange={handleChange}
             />
           </label>
         </div>
 
         <button type="submit">Adicionar hábito</button>
-
       </form>
 
+      {habits.length === 0 && (
+        <p>Nenhum hábito cadastrado ainda.</p>
+      )}
+
       <ul>
-
-        {habits.length === 0 && (
-          <p>Nenhum hábito cadastrado ainda. Que tal começar?</p>
-        )}
-
         {habits.map((habit) => (
           <HabitCard
             key={habit.id}
-            titulo={habit.titulo}
+            nome={habit.nome}
             descricao={habit.descricao}
             categoria={habit.categoria}
             meta={habit.meta}
             ativo={habit.ativo}
             diasFeitos={habit.diasFeitos}
             onRemover={() => removerHabit(habit.id)}
+            onToggle={() => toggleAtivo(habit.id)}
           />
         ))}
-
       </ul>
 
     </section>

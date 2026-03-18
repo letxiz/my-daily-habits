@@ -1,56 +1,45 @@
 function HabitCard({
-  titulo,
-  descricao = '',
+  nome,
+  descricao,
   categoria,
   meta,
-  ativo = true,
-  diasFeitos = 0,
-  onRemover
+  ativo,
+  diasFeitos,
+  onRemover,
+  onToggle
 }) {
 
-  const destaque = categoria === 'Saúde'
   const metaAtingida = diasFeitos >= meta
-
-  const mensagemMeta = metaAtingida
-    ? '🏆 Meta da semana atingida!'
-    : `${diasFeitos} de ${meta} dias concluídos`
 
   return (
     <div className="habit-card">
+      <h3>{nome}</h3>
 
-      <h3>{titulo}</h3>
+      {descricao && <p>{descricao}</p>}
 
-      {descricao && (
-        <p>{descricao}</p>
-      )}
+      <small>Categoria: {categoria}</small>
 
-      {categoria && (
-        <small>
-          Categoria: {categoria}
-          {destaque && ' ⭐'}
-        </small>
-      )}
+      <p>
+        {metaAtingida
+          ? '🏆 Meta atingida!'
+          : `${diasFeitos} de ${meta} dias`}
+      </p>
 
-      {meta && (
-        <p>{mensagemMeta}</p>
-      )}
+      <span>{ativo ? '✅ Ativo' : '⏸️ Pausado'}</span>
 
-      {metaAtingida && (
-        <p>⭐ Parabéns! Meta da semana atingida!</p>
-      )}
+      <div style={{ marginTop: '10px' }}>
+        {onToggle && (
+          <button onClick={onToggle}>
+            {ativo ? 'Pausar' : 'Ativar'}
+          </button>
+        )}
 
-      <span>
-        {ativo ? '✅ Ativo' : '⏸️ Pausado'}
-      </span>
-
-      {onRemover && (
-        <div>
-          <button type="button" onClick={onRemover}>
+        {onRemover && (
+          <button onClick={onRemover}>
             Remover
           </button>
-        </div>
-      )}
-
+        )}
+      </div>
     </div>
   )
 }
