@@ -1,43 +1,44 @@
-function HabitCard({
-  nome,
-  descricao,
-  categoria,
-  meta,
-  ativo,
-  diasFeitos,
-  onRemover,
-  onToggle
-}) {
+import { Link } from 'react-router-dom'
 
+function HabitCard({ id, nome, descricao, meta, ativo = true, diasFeitos = 0, categoria = 'Geral', onRemover, onToggle }) {
   const metaAtingida = diasFeitos >= meta
 
   return (
     <div className="habit-card">
-      <h3>{nome}</h3>
+      <div className="habit-card-header">
+        <h3>{nome}</h3>
+        <span style={{ color: ativo ? '#16a34a' : '#9ca3af' }}>
+          {ativo ? '✅ Ativo' : '⏸️ Pausado'}
+        </span>
+      </div>
 
-      {descricao && <p>{descricao}</p>}
-
+      <p>{descricao}</p>
       <small>Categoria: {categoria}</small>
 
       <p>
         {metaAtingida
-          ? '🏆 Meta atingida!'
-          : `${diasFeitos} de ${meta} dias`}
+          ? '🏆 Meta da semana atingida!'
+          : `${diasFeitos} de ${meta} dias concluídos`}
       </p>
 
-      <span>{ativo ? '✅ Ativo' : '⏸️ Pausado'}</span>
+      {metaAtingida && <p>⭐ Parabéns! Você manteve a sequência essa semana!</p>}
 
-      <div style={{ marginTop: '10px' }}>
-        {onToggle && (
-          <button onClick={onToggle}>
-            {ativo ? 'Pausar' : 'Ativar'}
+      <div className="habit-card-acoes">
+        {/* Link para a página de detalhes — usa o id do hábito na URL */}
+        <Link to={`/habito/${id}`} className="btn-detalhes">
+          Ver detalhes
+        </Link>
+
+        {onRemover && (
+          <button onClick={onRemover} className="btn-remover-card">
+            Remover
           </button>
         )}
 
-        {onRemover && (
-          <button onClick={onRemover}>
-            Remover
-          </button>
+        {onToggle && (
+         <button onClick={onToggle} className="btn-toggle">
+           {ativo ? 'Pausar' : 'Ativar'}
+         </button>
         )}
       </div>
     </div>
@@ -45,3 +46,5 @@ function HabitCard({
 }
 
 export default HabitCard
+
+

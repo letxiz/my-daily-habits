@@ -1,10 +1,11 @@
 import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'   // ← adicionar
 import HabitCard from './HabitCard'
 import { useHabits } from '../contexts/HabitsContext'
 
 function HabitList() {
-
   const { habits, adicionarHabit, removerHabit, toggleAtivo } = useHabits()
+  const navigate = useNavigate()                   // ← adicionar
 
   const [form, setForm] = useState({
     novoNome: '',
@@ -12,15 +13,12 @@ function HabitList() {
     novaCategoria: '',
     novaMeta: '7',
   })
-
   const [erroNome, setErroNome] = useState('')
   const nomeInputRef = useRef(null)
 
   const handleChange = (e) => {
     const { name, value } = e.target
-
     setForm(prev => ({ ...prev, [name]: value }))
-
     if (name === 'novoNome') {
       if (value.length > 0 && value.length < 3) {
         setErroNome('O nome deve ter pelo menos 3 caracteres.')
@@ -32,7 +30,6 @@ function HabitList() {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-
     if (!form.novoNome.trim() || erroNome) {
       nomeInputRef.current?.focus()
       return
@@ -49,27 +46,19 @@ function HabitList() {
     }
 
     adicionarHabit(novoHabit)
-
-    setForm({
-      novoNome: '',
-      novaDescricao: '',
-      novaCategoria: '',
-      novaMeta: '7',
-    })
-
+    setForm({ novoNome: '', novaDescricao: '', novaCategoria: '', novaMeta: '7' })
     setErroNome('')
-    nomeInputRef.current?.focus()
+    navigate('/habitos')                            // ← redireciona após salvar
   }
 
   if (!habits) return null
 
   return (
     <section>
-
       <form onSubmit={handleSubmit} className="habit-form">
-
         <div>
-          <label>Nome do hábito *
+          <label>
+            Nome do hábito *
             <input
               type="text"
               name="novoNome"
@@ -80,9 +69,9 @@ function HabitList() {
           </label>
           {erroNome && <p style={{ color: 'red', fontSize: '0.8rem' }}>{erroNome}</p>}
         </div>
-
         <div>
-          <label>Descrição
+          <label>
+            Descrição
             <input
               type="text"
               name="novaDescricao"
@@ -91,9 +80,9 @@ function HabitList() {
             />
           </label>
         </div>
-
         <div>
-          <label>Categoria
+          <label>
+            Categoria
             <input
               type="text"
               name="novaCategoria"
@@ -102,43 +91,42 @@ function HabitList() {
             />
           </label>
         </div>
-
         <div>
-          <label>Meta
+          <label>
+            Meta semanal (dias)
             <input
               type="number"
               name="novaMeta"
-              min="1"
-              max="7"
               value={form.novaMeta}
               onChange={handleChange}
+              min="1"
+              max="7"
             />
           </label>
         </div>
-
         <button type="submit">Adicionar hábito</button>
       </form>
 
       {habits.length === 0 && (
-        <p>Nenhum hábito cadastrado ainda.</p>
+        <p>Nenhum hábito cadastrado ainda. Que tal começar?</p>
       )}
 
       <ul>
         {habits.map((habit) => (
           <HabitCard
             key={habit.id}
+            id={habit.id}
             nome={habit.nome}
             descricao={habit.descricao}
-            categoria={habit.categoria}
             meta={habit.meta}
             ativo={habit.ativo}
             diasFeitos={habit.diasFeitos}
+            categoria={habit.categoria}
             onRemover={() => removerHabit(habit.id)}
             onToggle={() => toggleAtivo(habit.id)}
           />
         ))}
       </ul>
-
     </section>
   )
 }
